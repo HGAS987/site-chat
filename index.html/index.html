@@ -1,0 +1,116 @@
+<!-- login.html (ou index.html si tu veux la mettre comme page d'accueil) -->
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Connexion — Nous</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="login-wrap">
+    <div class="login-card" id="loginCard">
+      <div class="brand" style="justify-content:center">
+        <div class="logo">TV</div>
+      </div>
+      <h2>Bienvenue</h2>
+      <div class="small">Connecte-toi ou crée un compte pour accéder à votre espace privé.</div>
+
+      <div style="margin-top:14px;text-align:left">
+        <label class="small">Pseudo (affiché)</label>
+        <input id="displayName" type="text" placeholder="Ex : Loulou" />
+
+        <label class="small" style="margin-top:8px;display:block">Email</label>
+        <input id="email" type="email" placeholder="email@exemple.com" />
+
+        <label class="small" style="margin-top:8px;display:block">Mot de passe</label>
+        <input id="password" type="password" placeholder="8 caractères min" />
+
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <button id="signupBtn" class="btn" style="flex:1">S'inscrire</button>
+          <button id="signinBtn" class="btn" style="flex:1">Se connecter</button>
+        </div>
+
+        <div style="margin-top:10px;text-align:center">
+          <small class="small">Après connexion, une jolie ouverture vous mènera au chat ✨</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="launchOverlay" aria-hidden="true">
+    <div class="heart">💖</div>
+  </div>
+
+  <script type="module">
+    import { firebaseConfig } from './firebase-config.js';
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      updateProfile
+    } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const displayNameInput = document.getElementById('displayName');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const signupBtn = document.getElementById('signupBtn');
+    const signinBtn = document.getElementById('signinBtn');
+    const overlay = document.getElementById('launchOverlay');
+    const loginCard = document.getElementById('loginCard');
+
+    async function showSuccessAndGo(){
+      // belle animation puis redirection
+      overlay.classList.add('open');
+      // empêche tout clic
+      loginCard.style.pointerEvents = 'none';
+      setTimeout(()=> {
+        // redirection vers la page de chat
+        window.location.href = './chat.html';
+      }, 780); // délai = même durée que l'animation CSS
+    }
+
+    signupBtn.addEventListener('click', async () => {
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+      const display = displayNameInput.value.trim() || (email.split('@')[0] || 'Utilisateur');
+      if (!email || !password) { alert('Email et mot de passe requis'); return; }
+      try {
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+        await updateProfile(cred.user, { displayName: display });
+        // Success animation + redirect
+        showSuccessAndGo();
+      } catch (err) {
+        alert('Erreur inscription: ' + err.message);
+      }
+    });
+
+    signinBtn.addEventListener('click', async () => {
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+      if (!email || !password) { alert('Email et mot de passe requis'); return; }
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        // Success animation + redirect
+        showSuccessAndGo();
+      } catch (err) {
+        alert('Erreur connexion: ' + err.message);
+      }
+    });
+
+    // Si déjà connecté -> on redirige directement sans l'animation
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        // connecté (ex : rechargement), va directement au chat
+        window.location.href = './chat.html';
+      }
+    });
+  </script>
+</body>
+</html>
