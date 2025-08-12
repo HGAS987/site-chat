@@ -1,0 +1,77 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(120deg, #ffb6c1, #87cefa);
+    color: #fff;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.login-container {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    border-radius: 15px;
+    width: 300px;
+    margin: 100px auto;
+    box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
+}
+
+.login-container input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 8px;
+}
+
+.login-container button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background: #ff69b4;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.login-container button:hover {
+    background: #ff1493;
+}
+
+.chat-page header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background: rgba(0,0,0,0.3);
+}
+
+#messages {
+    height: 70vh;
+    overflow-y: scroll;
+    padding: 10px;
+}
+
+.message-input {
+    display: flex;
+    padding: 10px;
+}
+
+.message-input input {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+}
+
+.message-input button {
+    margin-left: 10px;
+    padding: 10px;
+    background: #87cefa;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
