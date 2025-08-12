@@ -4,7 +4,7 @@ function login() {
 
     firebase.auth().signInWithEmailAndPassword(email, password)
         .then(() => {
-            window.location.href = "chat.html";
+            window.location.href = "./chat.html";
         })
         .catch(error => {
             document.getElementById("login-error").innerText = "❌ " + error.message;
@@ -17,7 +17,7 @@ function register() {
 
     firebase.auth().createUserWithEmailAndPassword(email, password)
         .then(() => {
-            window.location.href = "chat.html";
+            window.location.href = "./chat.html";
         })
         .catch(error => {
             document.getElementById("login-error").innerText = "❌ " + error.message;
